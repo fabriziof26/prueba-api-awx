@@ -1,21 +1,35 @@
 ---
-- name: Obtener token
+- name: Ejecutar tarea vía API
   hosts: localhost
   gather_facts: false
 
   tasks:
-    - name: Solicitar token
+    - name: Obtener token
       uri:
         url: "http://10.100.32.114:9090/token"
         method: POST
         body_format: form-urlencoded
         body:
-          username: "admin"
-          password: "admin$2025"
+          username: "{{ api_username }}"
+          password: "{{ api_password }}"
+        return_content: true
+        status_code: 200
+      register: auth
+
+    - name: Ejecutar endpoint de la tarea
+      uri:
+        url: "http://10.100.32.114:9090/{{ endpoint }}"
+        method: POST
+        headers:
+          Authorization: "Bearer {{ auth.json.access_token }}"
+        body_format: form-urlencoded
+        body:
+          nrolote: "{{ nrolote }}"
+          relanzar: "{{ relanzar | default(0) }}"
         return_content: true
         status_code: 200
       register: resultado
 
-    - name: Mostrar token
+    - name: Mostrar respuesta
       debug:
         var: resultado.json
