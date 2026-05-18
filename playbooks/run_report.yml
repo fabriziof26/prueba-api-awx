@@ -1,17 +1,21 @@
-- name: Ejecutar automatización vía API
+---
+- name: Obtener token
   hosts: localhost
   gather_facts: false
 
   tasks:
-    - name: Llamar API interna
+    - name: Solicitar token
       uri:
         url: "http://10.100.32.114:9090/token"
         method: POST
         body_format: json
         body:
-          automation: "prueba endpoint token"
+          username: "admin"
+          password: "admin$2025"
         return_content: true
+        status_code: 200
       register: resultado
 
-    - debug:
+    - name: Mostrar token
+      debug:
         var: resultado.json
