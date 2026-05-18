@@ -1,0 +1,17 @@
+- name: Ejecutar automatización vía API
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Llamar API interna
+      uri:
+        url: "http://127.0.0.1:9090/token"
+        method: POST
+        body_format: json
+        body:
+          automation: "prueba endpoint token"
+        return_content: true
+      register: resultado
+
+    - debug:
+        var: resultado.json
