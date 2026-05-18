@@ -8,7 +8,7 @@
       uri:
         url: "http://10.100.32.114:9090/token"
         method: POST
-        body_format: json
+        body_format: form-urlencoded
         body:
           username: "admin"
           password: "admin$2025"
